@@ -142,6 +142,30 @@ WHERE NOT EXISTS (
 )
 ORDER BY u.user_name;
 
+--17. Write a query to show count of songs by rating value (1-5) for each genre. 
+--Show genre, rating_1, rating_2, rating_3, rating_4, rating_5. 
+--Order by genre.
+SELECT genre,COUNT(CASE WHEN rating>=4.5 THEN 1 END) AS rating_5,
+COUNT(CASE WHEN rating>=4.0 AND rating< 4.5 THEN 1 END) AS rating_4,
+COUNT(CASE WHEN rating>=3.0 AND rating< 3.5 THEN 1 END) AS rating_3,
+COUNT(CASE WHEN rating>=2.0 AND rating< 2.5 THEN 1  END) AS rating_2,
+COUNT(CASE WHEN rating>=1.0 AND rating< 1.5  THEN 1 END) AS rating_1
+FROM songs
+GROUP BY genre
+ORDER BY genre;
 
+--18.Show user_name, current_song_id, next_song_id, played_at. 
+--Order by user_name, played_at.
+SELECT  user_name,song_id,COALESCE(LEAD(song_id)OVER (PARTITION BY user_name ORDER BY
+played_at),0) AS next_song_id,played_at
+FROM play_history 
+ORDER BY user_name,played_at;
 
+--19.Write a query to show each user and how many days ago they joined. 
+--Show user_name, joined_date, and days_ago. Order by days_ago (newest first).
+SELECT user_name,created_at AS joined_date,
+(CURRENT_DATE-created_at::DATE)AS days_ago
+FROM users
+ORDER BY days_ago;
 
+--20.
