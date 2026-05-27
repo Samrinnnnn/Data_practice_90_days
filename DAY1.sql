@@ -77,7 +77,71 @@ GROUP BY user_name
 HAVING COUNT(history_id)>50
 ORDER BY total_plays DESC;
 
---10.
+--10.Write a query to find the top 5 most played songs.
+--Show title, artist, and play_count. Order by play_count descending.
+SELECT s.title,s.artist, COUNT(ph.history_id) AS play_count
+FROM songs s
+JOIN play_history ph ON s.song_id=ph.song_id
+GROUP BY s.title,s.artist
+ORDER BY play_count DESC
+LIMIT 5;
+
+--11.Write a query to find songs that have NEVER been played. 
+--Show song_id, title, and artist. Order by title.
+SELECT s.song_id,s.title,s.artist 
+FROM songs s
+LEFT JOIN play_history ph ON s.song_id=ph.song_id
+GROUP BY s.song_id,s.title,s.artist
+HAVING COUNT(ph.history_id)=0
+ORDER BY s.title;
+
+--12.Write a query to display songs where the title contains the word 'Love' (case-insensitive). 
+--Show title and artist. Order by title.
+SELECT title,artist FROM songs
+WHERE title ILIKE '%love%'
+ORDER BY title;
+
+--13.Write a query to show each user's contact information -
+--show user_name and contact (prefer phone, 
+--if NULL use email, if both NULL show 'No contact').
+SELECT user_name,COALESCE(COALESCE(phone,email),'No contact') AS contact
+FROM users;
+
+--14.Write a query to list all Premium songs and all songs with rating > 4.8 (combined, 
+--no duplicates). Show title, artist, and a column reason. Order by title.
+SELECT title,artist,'Premium' AS reason
+FROM songs
+WHERE is_premium=TRUE
+UNION
+SELECT title,artist,'High rating' AS reason
+FROM songs
+WHERE rating>4.8;
+
+--15.Write a query to find users who listened to at least one song in the last 7 days. 
+--Show user_name and last_play_date. Order by last_play_date descending.
+SELECT user_name,MAX(played_at) AS last_play_date
+FROM play_history
+WHERE played_at >= CURRENT_DATE - INTERVAL'7 days'
+GROUP BY user_name
+ORDER BY last_play_date DESC;
+
+--16.Write a query to find users who have NEVER listened to any song.
+--Show user_name and full_name. Order by user_name.
+SELECT u.user_name, u.full_name
+FROM users u
+LEFT JOIN play_history ph ON u.user_name = ph.user_name
+WHERE ph.history_id IS NULL
+ORDER BY u.user_name;
+
+---------------------OR-----------------
+SELECT u.user_name, u.full_name
+FROM users u
+WHERE NOT EXISTS (
+    SELECT 1 FROM play_history ph
+    WHERE ph.user_name = u.user_name
+)
+ORDER BY u.user_name;
+
 
 
 
