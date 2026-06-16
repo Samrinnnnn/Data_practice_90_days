@@ -12,6 +12,7 @@ Vaguely recalling the details, you know the incident occurred on July 15, 1983, 
 Your task is to track down the thief and bring them to justice. */
 SELECT *FROM suspects where id=97;
 
+/* 
 
 
 
