@@ -12,3 +12,12 @@ SELECT COUNT(experience_level )
   FROM volunteer_ducks 
   GROUP BY experience_level
     HAVING COUNT(experience_level) >=7;
+
+----Challenge 3: The Pattern Emerges
+----Find the district with the most theft reports. Each report has a household_id that links to a household, 
+--and each household belongs to a district. You will be working with the `missing_presents_report` and `duck_households` tables.
+-- Enter your SQL query here
+SELECT mode(d.district) AS most_theft FROM duck_households d
+JOIN missing_presents_report m ON d.household_id=m.household_id;
+ 
+
