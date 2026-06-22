@@ -19,5 +19,7 @@ SELECT COUNT(experience_level )
 -- Enter your SQL query here
 SELECT mode(d.district) AS most_theft FROM duck_households d
 JOIN missing_presents_report m ON d.household_id=m.household_id;
+
+---Challenge 4: 
  
 
